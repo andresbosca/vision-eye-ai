@@ -1,9 +1,21 @@
+# from ultralytics import YOLO
+
+# # Load a model
+# model = YOLO("yolov8n.pt")  # load a pretrained model (recommended for training)
+
+# # Use the model
+# model.train(data="african-wildlife.yaml", epochs=3)  # train the model
+# metrics = model.val()  # evaluate model performance on the validation set
+# path = model.export(format="tfjs")  # export the model to TenserFlowJS format
+
 from ultralytics import YOLO
 
 # Load a model
+model = YOLO("yolov8n.yaml")  # build a new model from scratch
 model = YOLO("yolov8n.pt")  # load a pretrained model (recommended for training)
 
 # Use the model
-model.train(data="african-wildlife.yaml", epochs=3)  # train the model
+model.train(data="coco128.yaml", epochs=3)  # train the model
 metrics = model.val()  # evaluate model performance on the validation set
+results = model("https://ultralytics.com/images/bus.jpg")  # predict on an image
 path = model.export(format="tfjs")  # export the model to TenserFlowJS format

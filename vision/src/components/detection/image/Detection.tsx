@@ -32,7 +32,13 @@ const Detection: React.FC<DetectionProps> = ({ model, labels }) => {
   return (
     <React.Fragment>
       <div>
-        <div className="center-div">
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           <div className="card">
             <MagicDropzone
               className="dropzone"
@@ -40,7 +46,14 @@ const Detection: React.FC<DetectionProps> = ({ model, labels }) => {
               multiple={false}
               onDrop={onDrop}
             >
-              <div className="center-div-wrap">
+              <div
+                style={{
+                  display: 'block',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexWrap: 'wrap',
+                }}
+              >
                 {loadedImg ? (
                   <img
                     className="dropzone-image"
@@ -50,7 +63,13 @@ const Detection: React.FC<DetectionProps> = ({ model, labels }) => {
                   />
                 ) : (
                   <div>
-                    <div className="center-div">
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
                       <img src={upload} width="50" height="50" alt="upload" />
                     </div>
                     <div style={{ display: 'block' }}>
@@ -62,7 +81,13 @@ const Detection: React.FC<DetectionProps> = ({ model, labels }) => {
             </MagicDropzone>
           </div>
         </div>
-        <div className="center-div">
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           {loadedImg && (
             <div
               style={{

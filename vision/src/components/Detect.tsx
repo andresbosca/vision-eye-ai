@@ -50,7 +50,12 @@ const Detect: React.FC = () => {
             }
           </div>
         ) : (
-          <div className="center-div load-div">
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center' ,   marginTop: '5%'
+
+          }}>
             {loading ? (
               <div style={{ textAlign: 'center' }}>
                 <LoadingSpinner />

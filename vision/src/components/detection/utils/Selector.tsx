@@ -1,6 +1,5 @@
 import Detection from '../image/Detection';
 import Video from '../video/Video';
-import Realtime from '../realtime/Realtime';
 import './Selector.css';
 import { GraphModel } from '@tensorflow/tfjs';
 
@@ -43,29 +42,10 @@ const Selector: React.FC<SelectorProps> = ({
             </div>
           )}
         </div>
-
-        <div className="section-div">
-          {selected === 'Realtime' ? (
-            <div
-              className="selected-div"
-              onClick={() => selectMode('Realtime')}
-            >
-              <div className="selected-text">Open Camera</div>
-            </div>
-          ) : (
-            <div
-              className="deselected-div"
-              onClick={() => selectMode('Realtime')}
-            >
-              <div className="deselected-text">Open Camera</div>
-            </div>
-          )}
-        </div>
       </div>
 
       {selected === 'Image' && <Detection model={model} labels={labels} />}
       {selected === 'Video' && <Video model={model} labels={labels} />}
-      {selected === 'Realtime' && <Realtime model={model} labels={labels} />}
     </>
   );
 };

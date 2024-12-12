@@ -148,6 +148,8 @@ const detectFrame = async (
     labels,
   );
 
+  console.log('detected');
+
   renderPredictions(predictions, canvasRef);
 };
 

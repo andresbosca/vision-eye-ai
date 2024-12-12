@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useRef, useContext } from 'react';
 import MagicDropzone from 'react-magic-dropzone';
 import { useDimension } from '../utils/dimension-hook';
@@ -12,16 +13,16 @@ interface VideoProps {
 
 const Video: React.FC<VideoProps> = ({ labels, model }) => {
   const dimensions = useDimension();
-  const [frame, setFrame] = useState();
+  const [frame, setFrame] = useState<string>();
   const [videoLoaded, setVideoLoaded] = useState(false);
-  const videoRef = useRef();
-  const canvasRef = useRef();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useBoxRenderer({
     labels,
     model,
-    videoRef,
-    canvasRef,
+    videoRef: videoRef as any,
+    canvasRef: canvasRef as any,
     shouldRender: videoLoaded,
   });
 
@@ -29,10 +30,8 @@ const Video: React.FC<VideoProps> = ({ labels, model }) => {
     setVideoLoaded(false);
     if (accepted && accepted.length > 0) {
       const reader = new FileReader();
-
-
-      **
       reader.addEventListener('load', () => {
+        
         videoRef.current.src = reader.result;
         setFrame(`${reader.result}#t=0.1`);
         videoRef.current.onloadeddata = () => {
@@ -46,7 +45,13 @@ const Video: React.FC<VideoProps> = ({ labels, model }) => {
   return (
     <React.Fragment>
       <div>
-        <div className="center-div">
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           <div className="card">
             <MagicDropzone
               className="dropzone"
@@ -54,12 +59,25 @@ const Video: React.FC<VideoProps> = ({ labels, model }) => {
               multiple={false}
               onDrop={onDrop}
             >
-              <div className="center-div-wrap">
+              <div
+                style={{
+                  display: 'block',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexWrap: 'wrap',
+                }}
+              >
                 {frame ? (
                   <video className="dropzone-image" src={frame} width="100" />
                 ) : (
                   <div>
-                    <div className="center-div">
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
                       <img src={upload} width="50" height="50" alt="upload" />
                     </div>
                     <div style={{ display: 'block' }}>
@@ -71,7 +89,13 @@ const Video: React.FC<VideoProps> = ({ labels, model }) => {
             </MagicDropzone>
           </div>
         </div>
-        <div className="center-div">
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           <div
             style={{
               width: `${dimensions.width}px`,
