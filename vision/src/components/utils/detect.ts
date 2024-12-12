@@ -1,16 +1,10 @@
-import * as tf from "@tensorflow/tfjs";
-import { renderBoxes } from "./renderBox";
-import labels from "./labels.json";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import * as tf from '@tensorflow/tfjs';
+import { renderBoxes } from './renderBox';
+import labels from './labels.json';
 
 const numClass = labels.length;
 
-/**
- * Preprocess image / frame before forwarded into the model
- * @param {HTMLVideoElement|HTMLImageElement} source
- * @param {Number} modelWidth
- * @param {Number} modelHeight
- * @returns input tensor, xRatio and yRatio
- */
 const preprocess = (source, modelWidth, modelHeight) => {
   let xRatio, yRatio; // ratios for boxes
 
@@ -30,7 +24,7 @@ const preprocess = (source, modelWidth, modelHeight) => {
     yRatio = maxSize / h; // update yRatio
 
     return tf.image
-      .resizeBilinear(imgPadded, [modelWidth, modelHeight]) // resize frame
+      .resizeBilinear(imgPadded as any, [modelWidth, modelHeight]) // resize frame
       .div(255.0) // normalize
       .expandDims(0); // add batch
   });
@@ -38,13 +32,6 @@ const preprocess = (source, modelWidth, modelHeight) => {
   return [input, xRatio, yRatio];
 };
 
-/**
- * Function run inference and do detection from source.
- * @param {HTMLImageElement|HTMLVideoElement} source
- * @param {tf.GraphModel} model loaded YOLOv8 tensorflow.js model
- * @param {HTMLCanvasElement} canvasRef canvas reference
- * @param {VoidFunction} callback function to run after detection process
- */
 export const detect = async (source, model, canvasRef, callback = () => {}) => {
   const [modelWidth, modelHeight] = model.inputShape.slice(1, 3); // get model width and height
 
@@ -53,7 +40,7 @@ export const detect = async (source, model, canvasRef, callback = () => {}) => {
 
   const res = model.net.execute(input); // inference model
   console.log(res.arraySync()[0]);
-  const transRes = res.transpose([0, 2, ]); // transpose result [b, det, n] => [b, n, det]
+  const transRes = res.transpose([0, 2]); // transpose result [b, det, n] => [b, n, det]
   console.log(transRes);
   const boxes = tf.tidy(() => {
     const w = transRes.slice([0, 0, 2], [-1, -1, 1]); // get width
@@ -68,7 +55,7 @@ export const detect = async (source, model, canvasRef, callback = () => {}) => {
           tf.add(y1, h), //y2
           tf.add(x1, w), //x2
         ],
-        2
+        2,
       )
       .squeeze();
   }); // process boxes [y1, x1, y2, x2]
@@ -78,13 +65,22 @@ export const detect = async (source, model, canvasRef, callback = () => {}) => {
     return [rawScores.max(1), rawScores.argMax(1)];
   }); // get max scores and classes index
 
-  const nms = await tf.image.nonMaxSuppressionAsync(boxes, scores, 500, 0.45, 0.2); // NMS to filter boxes
+  const nms = await tf.image.nonMaxSuppressionAsync(
+    boxes as any,
+    scores,
+    500,
+    0.45,
+    0.2,
+  ); // NMS to filter boxes
 
   const boxes_data = boxes.gather(nms, 0).dataSync(); // indexing boxes by nms index
   const scores_data = scores.gather(nms, 0).dataSync(); // indexing scores by nms index
   const classes_data = classes.gather(nms, 0).dataSync(); // indexing classes by nms index
 
-  renderBoxes(canvasRef, boxes_data, scores_data, classes_data, [xRatio, yRatio]); // render boxes
+  renderBoxes(canvasRef, boxes_data, scores_data, classes_data, [
+    xRatio,
+    yRatio,
+  ]); // render boxes
   tf.dispose([res, transRes, boxes, scores, classes, nms]); // clear memory
 
   callback();
@@ -92,19 +88,13 @@ export const detect = async (source, model, canvasRef, callback = () => {}) => {
   tf.engine().endScope(); // end of scoping
 };
 
-/**
- * Function to detect video from every source.
- * @param {HTMLVideoElement} vidSource video source
- * @param {tf.GraphModel} model loaded YOLOv8 tensorflow.js model
- * @param {HTMLCanvasElement} canvasRef canvas reference
- */
 export const detectVideo = (vidSource, model, canvasRef) => {
   /**
    * Function to detect every frame from video
    */
   const detectFrame = async () => {
     if (vidSource.videoWidth === 0 && vidSource.srcObject === null) {
-      const ctx = canvasRef.getContext("2d");
+      const ctx = canvasRef.getContext('2d');
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clean canvas
       return; // handle if source is closed
     }

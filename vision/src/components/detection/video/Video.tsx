@@ -31,7 +31,7 @@ const Video: React.FC<VideoProps> = ({ labels, model }) => {
     if (accepted && accepted.length > 0) {
       const reader = new FileReader();
       reader.addEventListener('load', () => {
-        videoRef.current.src = reader.result;
+        videoRef.current.src = reader.result as string;
         setFrame(`${reader.result}#t=0.1`);
         videoRef.current.onloadeddata = () => {
           setVideoLoaded(true);
