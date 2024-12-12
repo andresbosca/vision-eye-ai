@@ -120,6 +120,7 @@ const Detection: React.FC<DetectionProps> = ({ model, labels }) => {
                     position: 'absolute',
                     top: '0px',
                     left: '0px',
+                    zIndex: 1,
                   }}
                   ref={canvasRef}
                 />

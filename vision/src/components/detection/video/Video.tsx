@@ -31,7 +31,6 @@ const Video: React.FC<VideoProps> = ({ labels, model }) => {
     if (accepted && accepted.length > 0) {
       const reader = new FileReader();
       reader.addEventListener('load', () => {
-        
         videoRef.current.src = reader.result;
         setFrame(`${reader.result}#t=0.1`);
         videoRef.current.onloadeddata = () => {
@@ -129,6 +128,7 @@ const Video: React.FC<VideoProps> = ({ labels, model }) => {
                   position: 'absolute',
                   top: '0px',
                   left: '0px',
+                  zIndex: 1,
                 }}
                 ref={canvasRef}
               />

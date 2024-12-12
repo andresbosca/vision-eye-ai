@@ -17,17 +17,11 @@ const Detect: React.FC = () => {
     const handleLoadModel = async () => {
       setLoading(true);
 
-      // Loading Model for first time
       const newModel = await tf.loadGraphModel(MODEL_JSON);
       setModel(newModel);
       const response = await fetch(LABELS_URL);
       const labels_json = await response.json();
       setLabels(labels_json);
-      newModel.save('indexeddb://animal_detector');
-      localStorage.setItem(
-        'animal_detector_labels',
-        JSON.stringify(labels_json),
-      );
 
       setLoading(false);
     };
@@ -50,12 +44,14 @@ const Detect: React.FC = () => {
             }
           </div>
         ) : (
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center' ,   marginTop: '5%'
-
-          }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: '5%',
+            }}
+          >
             {loading ? (
               <div style={{ textAlign: 'center' }}>
                 <LoadingSpinner />
