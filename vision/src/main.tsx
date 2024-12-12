@@ -1,9 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import Landing from './components/Landing';
+import Detect from './components/Detect';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Landing />
+    <Detect />
   </StrictMode>,
 );

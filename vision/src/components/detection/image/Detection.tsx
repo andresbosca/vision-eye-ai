@@ -1,5 +1,4 @@
 import React, { useState, useRef, useContext } from 'react';
-import { ModelContext } from '../context/model-context';
 import { useDimension } from '../utils/dimension-hook';
 import useDetector from './useDetector';
 import MagicDropzone from 'react-magic-dropzone';
